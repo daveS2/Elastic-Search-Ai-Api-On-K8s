@@ -1,0 +1,39 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: census-ai-api
+spec:
+  selector:
+    app: census-ai-api
+  ports:
+  - port: 9000
+    targetPort: 9000
+  type: LoadBalancer
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: census-ai-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: census-ai-api
+  template:
+    metadata:
+      name: census-ai-api
+      labels:
+        app: census-ai-api
+    spec:
+      containers:
+      - name: census-ai-api
+        image: dave2/address-index-api:latest
+        imagePullPolicy: Always
+        env:
+          - name: ONS_AI_API_ES_URI
+            value: 10.10.10.10
+          - name: ONS_AI_API_ES_PORT
+            value: "9200"
+          - name: ONS_AI_API_ES_CLUSTER_NAME
+            value: "elasticsearch" 
+
