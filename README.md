@@ -3,8 +3,8 @@ Experimental work looking at ES and ONS AI API on kubernetes in Google Cloud Pla
 
 # Prerequesites
 
-..* [Helm install](https://docs.helm.sh/using_helm/)
-..* [Kubectl installed](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+* [Helm install](https://docs.helm.sh/using_helm/)
+* [Kubectl installed](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 
 # Steps to set-up Helm
 
@@ -29,12 +29,12 @@ or run, customised for ONS: `kubectl expose svc census-ai-elasticsearch-client -
 
 # Optional create custom ES containter:
 1. Clone repo: https://github.com/elastic/elasticsearch-docker
-2. cd <that repo>
+2. `cd <that repo>`
 3. Build the image: `docker build -t yourrepo/imagename:tag .`
 4. Get the image ID `docker images`
-5. Run the image: `docker run <images id>
+5. Run the image: `docker run <images id>`
 6. Run `docker ps` and grab the container id
-7. Enter the container: `docker exec -it <containter id> /bin/bash
+7. Enter the container: `docker exec -it <containter id> /bin/bash`
 8. Enter the image customise the build for example: `sudo bin/elasticsearch-plugin install repository-gcs`
 9. Rebuild `docker build -t yourrepo/imagename:tag .`
 10. Push to your repo: `docker push`
@@ -43,13 +43,14 @@ or run, customised for ONS: `kubectl expose svc census-ai-elasticsearch-client -
 # Optional, install cerebro (ES UI)
 
 1. `helm install stable/cerebro`
-2. `kubectl expose deployment guiding-zorse-cerebro --type=LoadBalancer --name=elastic-search-ui`
+2. `kubectl expose deployment <deployment name> --type=LoadBalancer --name=elastic-search-ui`
 
 # Optional create Google Cloud Storage Repository
 
 ## Prequsites
-..* GCS plugin installed within ES container(see above to customise ES containers)
-..* Correct ES container deployed
+
+* GCS plugin installed within ES container(see above to customise ES containers)
+* Correct ES container deployed
 
 1. Run:
 ``` 
