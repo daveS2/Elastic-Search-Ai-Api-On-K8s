@@ -9,6 +9,24 @@ spec:
   - port: 9000
     targetPort: 9000
   type: LoadBalancer
+  loadBalancerSourceRanges: [80.5.92.42/32, 62.253.69.130/32, 35.242.166.25/32, 88.98.92.62/32]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: census-ai-api-internal
+  annotations:
+    cloud.google.com/load-balancer-type: "Internal"
+spec:
+  type: LoadBalancer
+  loadBalancerIP:  # if omitted, an IP is generated
+  loadBalancerSourceRanges: [80.5.92.42/32, 62.253.69.130/32, 35.242.166.25/32, 88.98.92.62/32] # defaults to 0.0.0.0/0
+  ports:
+  - name: census-ai-api-internal
+    port: 9000
+    protocol: TCP # default; can also specify UDP
+  selector:
+    app: census-ai-api
 ---
 kind: Deployment
 apiVersion: apps/v1
@@ -27,13 +45,16 @@ spec:
     spec:
       containers:
       - name: census-ai-api
-        image: dave2/address-index-api:latest
+        image: eu.gcr.io/census-ci/address-index-api
         imagePullPolicy: Always
         env:
           - name: ONS_AI_API_ES_URI
-            value: 10.10.10.10
+            value: 10.127.0.9
           - name: ONS_AI_API_ES_PORT
             value: "9200"
           - name: ONS_AI_API_ES_CLUSTER_NAME
             value: "elasticsearch" 
-
+          - name: ONS_AI_API_HYBRID_INDEX_SKINNY
+            value: "hybrid_latest_skinny_no_history"
+          - name: ONS_AI_API_HYBRID_INDEX_HIST_SKINNY
+            value: "hybrid_latest_skinny" 
